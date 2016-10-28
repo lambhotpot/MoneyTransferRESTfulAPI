@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender class="org.apache.log4j.RollingFileAppender" name="APPLICATION">
+        <param name="File" value="../logs/ess-feed-dora-web.log" />
+        <param name="Threshold" value="debug" />
+        <param name="Append" value="true" />
+        <param name="MaxFileSize" value="5MB" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d [%t] [%-5p] [%c{1}] %m%n" />
+        </layout>
+    </appender>
+
+    <category name="applicationLog">
+        <priority value="INFO" />
+        <appender-ref ref="APPLICATION" />
+    </category>
+
+</log4j:configuration>
