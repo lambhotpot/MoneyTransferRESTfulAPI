@@ -35,4 +35,8 @@ public class AccountDAOImpl implements AccountDAO {
     public boolean updateAccountBalance(long accountId, double balance) {
         return false;
     }
+
+    public void createAccountTable() {
+
+    }
 }

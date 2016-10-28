@@ -11,9 +11,8 @@ public interface AccountDAO {
     Account getAccountById(long accountId);
     Account getAccountByName(String username);
     boolean createAccount(Account account);
-    //boolean updateAccount(Account account);
     boolean deleteAccountByName(String username);
     boolean deleteAccountById(long accountId);
     boolean updateAccountBalance(long accountId, double balance);
-
+    void createAccountTable();
 }

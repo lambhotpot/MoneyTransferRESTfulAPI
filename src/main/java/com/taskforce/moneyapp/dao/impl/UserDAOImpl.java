@@ -34,4 +34,10 @@ public class UserDAOImpl implements UserDAO {
     public boolean deleteUser(long userId) {
         return false;
     }
+
+    public void createUserTable(){}
+
+
+
+
 }

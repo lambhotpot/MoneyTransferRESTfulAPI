@@ -13,5 +13,6 @@ public interface UserDAO {
     boolean insertUser(User user);
     boolean updateUser(User user);
     boolean deleteUser(long userId);
+    void createUserTable();
 
 }
