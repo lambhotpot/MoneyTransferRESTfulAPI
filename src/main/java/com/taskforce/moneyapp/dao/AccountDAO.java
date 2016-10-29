@@ -10,9 +10,9 @@ public interface AccountDAO {
     List<Account> getAllAccounts();
     Account getAccountById(long accountId);
     Account getAccountByName(String username);
-    boolean createAccount(Account account);
-    boolean deleteAccountByName(String username);
-    boolean deleteAccountById(long accountId);
-    boolean updateAccountBalance(long accountId, double balance);
-    void createAccountTable();
+    int createAccount(Account account);
+    int deleteAccountByName(String username);
+    int deleteAccountById(long accountId);
+    int updateAccountBalance(long accountId, double balance);
+
 }

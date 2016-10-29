@@ -11,7 +11,6 @@ public class UserTransaction {
     @JsonProperty(required = true)
     private Double amount;
 
-
     @JsonProperty(required = true)
     private Long fromAccountId;
 

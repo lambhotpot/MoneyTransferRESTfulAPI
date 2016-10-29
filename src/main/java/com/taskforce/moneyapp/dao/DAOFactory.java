@@ -9,8 +9,7 @@ public abstract class DAOFactory {
 
     public abstract UserDAO getUserDAO();
     public abstract AccountDAO getAccountDAO();
-
-
+    public abstract void populateTestData();
 
     public static DAOFactory getDAOFactory(
             int factoryCode) {

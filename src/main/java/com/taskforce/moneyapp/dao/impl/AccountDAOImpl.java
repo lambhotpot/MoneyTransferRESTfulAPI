@@ -7,6 +7,11 @@ import java.util.List;
 
 
 public class AccountDAOImpl implements AccountDAO {
+    private final String SQL_GET_ACC_BY_ID = "SELECT * FROM Account WHERE AccountId = ? ";
+    private final String SQL_GET_ACC_BY_USER_NAME = "SELECT * FROM Account WHERE UserName = ? ";
+    private final String SQL_CREATE_ACC= "INSERT INTO Account (UserName, Balance, CurrencyCode) VALUES (?, ?, ?)";
+    private final String SQL_UPDATE_ACC_BALANCE = "UPDATE Account SET Balance = ? WHERE AccountId = ? ";
+
 
     public List<Account> getAllAccounts() {
         return null;
@@ -20,23 +25,20 @@ public class AccountDAOImpl implements AccountDAO {
         return null;
     }
 
-    public boolean createAccount(Account account) {
-        return false;
+    public int createAccount(Account account) {
+        return 0;
     }
 
-    public boolean deleteAccountByName(String username) {
-        return false;
+    public int deleteAccountByName(String username) {
+        return 0;
     }
 
-    public boolean deleteAccountById(long accountId) {
-        return false;
+    public int deleteAccountById(long accountId) {
+        return 0;
     }
 
-    public boolean updateAccountBalance(long accountId, double balance) {
-        return false;
+    public int updateAccountBalance(long accountId, double balance) {
+        return 0;
     }
 
-    public void createAccountTable() {
-
-    }
 }

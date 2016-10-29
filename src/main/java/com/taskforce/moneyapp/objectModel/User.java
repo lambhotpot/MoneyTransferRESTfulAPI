@@ -25,7 +25,7 @@ public class User {
         this.emailAddress = emailAddress;
     }
 
-    public User(int userId, String userName, String emailAddress) {
+    public User(long userId, String userName, String emailAddress) {
         this.userId = userId;
         this.userName = userName;
         this.emailAddress = emailAddress;
