@@ -46,8 +46,8 @@ public class MoneyTransferDemoApp {
         ServletHolder servletHolder = context.addServlet(ServletContainer.class, "/*");
         servletHolder.setInitParameter("jersey.config.server.provider.classnames",
                 UserService.class.getCanonicalName());
-        //  ClientService.class.getCanonicalName() + "," +
-        //  CurrencyService.class.getCanonicalName());
+        //  AccountService.class.getCanonicalName() + "," +
+        //  TransactionService.class.getCanonicalName());
 
         try {
             server.start();

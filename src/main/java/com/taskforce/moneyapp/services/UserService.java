@@ -24,7 +24,7 @@ public class UserService {
         log.debug("Request Received for get User "+username);
         final User user = daoFactory.getUserDAO().getUserByName(username);
         if(user == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            throw new WebApplicationException("User Not Found", Response.Status.NOT_FOUND);
         }
         return user;
     }

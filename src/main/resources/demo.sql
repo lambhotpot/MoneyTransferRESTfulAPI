@@ -11,6 +11,6 @@ Balance DECIMAL(20,4),
 CurrencyCode VARCHAR(30)
 );
 
-INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('yangluo',123.5000,'USD');
-INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('qinfran',5000.0000,'USD');
+INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('yangluo',100.0000,'USD');
+INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('qinfran',200.0000,'USD');
 

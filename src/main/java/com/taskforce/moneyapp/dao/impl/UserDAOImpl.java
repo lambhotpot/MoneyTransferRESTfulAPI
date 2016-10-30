@@ -14,7 +14,7 @@ import java.util.List;
 
 
 public class UserDAOImpl implements UserDAO {
-    static Logger log = Logger.getLogger(UserDAOImpl.class);
+    private static Logger log = Logger.getLogger(UserDAOImpl.class);
     private final String SQL_GET_USER_BY_ID = "SELECT * FROM User WHERE UserId = ? ";
     private final String SQL_GET_USER_BY_NAME = "SELECT * FROM User WHERE UserName = ? ";
     private final String SQL_INSERT_USER = "INSERT INTO User (UserName, EmailAddress) VALUES (?, ?)";

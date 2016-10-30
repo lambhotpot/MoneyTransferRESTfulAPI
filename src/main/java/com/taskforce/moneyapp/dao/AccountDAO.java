@@ -1,6 +1,7 @@
 package com.taskforce.moneyapp.dao;
 
 import com.taskforce.moneyapp.objectModel.Account;
+import com.taskforce.moneyapp.objectModel.UserTransaction;
 
 import java.util.List;
 
@@ -14,5 +15,5 @@ public interface AccountDAO {
     int deleteAccountByName(String username);
     int deleteAccountById(long accountId);
     int updateAccountBalance(long accountId, double balance);
-
+    int transferAccountBalance(UserTransaction userTransaction);
 }
