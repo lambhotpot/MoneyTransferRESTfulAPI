@@ -23,7 +23,7 @@ public class PropertiesUtil {
             try {
                 URL url = Loader.getResource(fileName);
                 String filePath = url.getFile();
-                log.info("loadConfig(): Loading config file from path: " + fileName);
+                log.info("loadConfig(): Loading config file from path: " + url.getPath());
                 FileInputStream fis = new FileInputStream(filePath);
                 properties.load(fis);
 

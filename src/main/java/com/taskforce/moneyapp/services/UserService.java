@@ -19,10 +19,10 @@ public class UserService {
 
 
     @GET
-    @Path("/{username}")
-    public User get(@PathParam("username") String username) {
-        log.debug("Request Received for get User "+username);
-        final User user = daoFactory.getUserDAO().getUserByName(username);
+    @Path("/{userName}")
+    public User get(@PathParam("username") String userName) {
+        log.debug("Request Received for get User "+userName);
+        final User user = daoFactory.getUserDAO().getUserByName(userName);
         if(user == null) {
             throw new WebApplicationException("User Not Found", Response.Status.NOT_FOUND);
         }

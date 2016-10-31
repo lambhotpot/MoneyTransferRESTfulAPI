@@ -121,6 +121,7 @@ public class AccountDAOImpl implements AccountDAO {
             if(fromAccount != null && toAccount != null){
 
                 updateStmt = conn.prepareStatement(SQL_UPDATE_ACC_BALANCE);
+                //TODO: money function for calculating
                 updateStmt.setDouble(1, fromAccount.getBalance() - userTransaction.getAmount());
                 updateStmt.setLong(2, userTransaction.getFromAccountId());
                 updateStmt.addBatch();
