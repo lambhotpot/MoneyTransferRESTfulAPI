@@ -7,6 +7,7 @@ import com.taskforce.moneyapp.objectModel.UserTransaction;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +19,6 @@ public class AccountDAOImpl implements AccountDAO {
     private static Logger log = Logger.getLogger(AccountDAOImpl.class);
     private final String SQL_GET_ACC_BY_ID = "SELECT * FROM Account WHERE AccountId = ? ";
     private final String SQL_LOCK_ACC_BY_ID = "SELECT * FROM Account WHERE AccountId = ? FOR UPDATE";
-    private final String SQL_GET_ACC_BY_USER_NAME = "SELECT * FROM Account WHERE UserName = ? ";
     private final String SQL_CREATE_ACC = "INSERT INTO Account (UserName, Balance, CurrencyCode) VALUES (?, ?, ?)";
     private final String SQL_UPDATE_ACC_BALANCE = "UPDATE Account SET Balance = ? WHERE AccountId = ? ";
 
@@ -38,7 +38,7 @@ public class AccountDAOImpl implements AccountDAO {
             stmt.setLong(1, accountId);
             rs = stmt.executeQuery();
             if (rs.next()) {
-                acc = new Account(rs.getLong("AccountId"), rs.getString("UserName"), rs.getDouble("Balance"), rs.getString("CurrencyCode"));
+                acc = new Account(rs.getLong("AccountId"), rs.getString("UserName"), rs.getBigDecimal("Balance"), rs.getString("CurrencyCode"));
                 if (log.isDebugEnabled())
                     log.debug("Retrieve Account By Id: " + acc);
             }
@@ -52,34 +52,26 @@ public class AccountDAOImpl implements AccountDAO {
 
     }
 
-    public Account getAccountByName(String username) {
-        return null;
-    }
 
     public int createAccount(Account account) {
         return 0;
-    }
-
-    public int deleteAccountByName(String username) {
-        throw new UnsupportedOperationException("Method not implemented");
     }
 
     public int deleteAccountById(long accountId) {
         throw new UnsupportedOperationException("Method not implemented");
     }
 
-    public int updateAccountBalance(long accountId, double balance) {
+    public int updateAccountBalance(long accountId, BigDecimal balance) {
         Connection conn = null;
         PreparedStatement stmt = null;
-
         try {
             conn = H2DAOFactory.getConnection();
             stmt = conn.prepareStatement(SQL_UPDATE_ACC_BALANCE);
-            stmt.setDouble(1, balance);
+            stmt.setBigDecimal(1, balance);
             stmt.setLong(2, accountId);
             return stmt.executeUpdate();
         } catch (SQLException e) {
-            log.error(String.format("Error Updating Account Id = %d Balance = %.4f: ", accountId, balance));
+            log.error("Error Updating Account Id = " + accountId + "Balance =  " + balance);
             throw new RuntimeException("updateAccountBalance(): Error update user data", e);
         } finally {
             DbUtils.closeQuietly(conn);
@@ -88,7 +80,13 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
 
+    /**
+     *
+     * @param userTransaction
+     * @return no. of rows in Account affected by the the user transaction. return -1 on error
+     */
     public int transferAccountBalance(UserTransaction userTransaction) {
+        int result = -1;
         Connection conn = null;
         PreparedStatement lockStmt = null;
         PreparedStatement updateStmt = null;
@@ -99,13 +97,12 @@ public class AccountDAOImpl implements AccountDAO {
         try {
             conn = H2DAOFactory.getConnection();
             conn.setAutoCommit(false);
-
             //lock the credit and debit account for writing:
             lockStmt = conn.prepareStatement(SQL_LOCK_ACC_BY_ID);
             lockStmt.setLong(1, userTransaction.getFromAccountId());
             rs = lockStmt.executeQuery();
             if (rs.next()) {
-                fromAccount = new Account(rs.getLong("AccountId"), rs.getString("UserName"), rs.getDouble("Balance"), rs.getString("CurrencyCode"));
+                fromAccount = new Account(rs.getLong("AccountId"), rs.getString("UserName"), rs.getBigDecimal("Balance"), rs.getString("CurrencyCode"));
                 if (log.isDebugEnabled())
                     log.debug("transferAccountBalance from Account: " + fromAccount);
             }
@@ -113,31 +110,34 @@ public class AccountDAOImpl implements AccountDAO {
             lockStmt.setLong(1, userTransaction.getToAccountId());
             rs = lockStmt.executeQuery();
             if (rs.next()) {
-                toAccount = new Account(rs.getLong("AccountId"), rs.getString("UserName"), rs.getDouble("Balance"), rs.getString("CurrencyCode"));
+                toAccount = new Account(rs.getLong("AccountId"), rs.getString("UserName"), rs.getBigDecimal("Balance"), rs.getString("CurrencyCode"));
                 if (log.isDebugEnabled())
                     log.debug("transferAccountBalance to Account: " + toAccount);
             }
-
-            if(fromAccount != null && toAccount != null){
-
+            //begin to transfer money between accounts
+            if (fromAccount != null && toAccount != null && fromAccount.getCurrencyCode().equals(toAccount.getCurrencyCode())) {
                 updateStmt = conn.prepareStatement(SQL_UPDATE_ACC_BALANCE);
-                //TODO: money function for calculating
-                updateStmt.setDouble(1, fromAccount.getBalance() - userTransaction.getAmount());
+                updateStmt.setBigDecimal(1, fromAccount.getBalance().subtract(userTransaction.getAmount()));
                 updateStmt.setLong(2, userTransaction.getFromAccountId());
                 updateStmt.addBatch();
-                updateStmt.setDouble(1, toAccount.getBalance() + userTransaction.getAmount());
+                updateStmt.setBigDecimal(1, toAccount.getBalance().add(userTransaction.getAmount()));
                 updateStmt.setLong(2, userTransaction.getToAccountId());
                 updateStmt.addBatch();
-                updateStmt.executeBatch();
+                int[] rowsUpdated = updateStmt.executeBatch();
+                result = rowsUpdated[0]+rowsUpdated[1];
+                if (log.isDebugEnabled()){
+                    log.debug("Number of rows updated for the transfer : " + result);
+                }
             }
             // If there is no error, commit the transaction
             conn.commit();
         } catch (SQLException se) {
             // rollback transaction if exception occurs
+            log.error("transferAccountBalance(): User Transaction Failed, rollback initiated for: " + userTransaction,se);
             try {
                 conn.rollback();
-            } catch (SQLException e) {
-                throw new RuntimeException("transferAccountBalance(): Fail to rollback transaction");
+            } catch (SQLException re) {
+                throw new RuntimeException("transferAccountBalance(): Fail to rollback transaction",re);
             }
         } finally {
             DbUtils.closeQuietly(conn);
@@ -145,8 +145,7 @@ public class AccountDAOImpl implements AccountDAO {
             DbUtils.closeQuietly(lockStmt);
             DbUtils.closeQuietly(updateStmt);
         }
-
-        return 0;
+        return result;
     }
 
 }

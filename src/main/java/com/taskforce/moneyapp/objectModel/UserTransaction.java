@@ -3,13 +3,15 @@ package com.taskforce.moneyapp.objectModel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigDecimal;
+
 public class UserTransaction {
 
     @JsonProperty(required = true)
     private String currencyCode;
 
     @JsonProperty(required = true)
-    private Double amount;
+    private BigDecimal amount;
 
     @JsonProperty(required = true)
     private Long fromAccountId;
@@ -20,7 +22,7 @@ public class UserTransaction {
 
     public UserTransaction() {}
 
-    public UserTransaction(String currencyCode, Double amount, Long fromAccountId, Long toAccountId) {
+    public UserTransaction(String currencyCode, BigDecimal amount, Long fromAccountId, Long toAccountId) {
         this.currencyCode = currencyCode;
         this.amount = amount;
         this.fromAccountId = fromAccountId;
@@ -31,7 +33,7 @@ public class UserTransaction {
         return currencyCode;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 

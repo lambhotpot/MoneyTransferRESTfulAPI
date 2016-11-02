@@ -1,12 +1,10 @@
 package com.taskforce.moneyapp.utilities;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.helpers.Loader;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.Properties;
 
 
@@ -21,10 +19,8 @@ public class PropertiesUtil {
             log.warn("loadConfig: config file name cannot be null");
         } else {
             try {
-                URL url = Loader.getResource(fileName);
-                String filePath = url.getFile();
-                log.info("loadConfig(): Loading config file from path: " + url.getPath());
-                FileInputStream fis = new FileInputStream(filePath);
+                log.info("loadConfig(): Loading config file: " + fileName );
+                final InputStream fis = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
                 properties.load(fis);
 
             } catch (FileNotFoundException fne) {

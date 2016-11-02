@@ -6,10 +6,7 @@ import com.taskforce.moneyapp.objectModel.User;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 
@@ -71,21 +68,33 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
-    public int insertUser(User user) {
+    public long insertUser(User user) {
         Connection conn = null;
         PreparedStatement stmt = null;
+        ResultSet generatedKeys = null;
         try {
             conn = H2DAOFactory.getConnection();
-            stmt = conn.prepareStatement(SQL_INSERT_USER);
+            stmt = conn.prepareStatement(SQL_INSERT_USER, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, user.getUserName());
             stmt.setString(2, user.getEmailAddress());
-            return stmt.executeUpdate();
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                log.error("Creating user failed, no rows affected.");
+                return -1l;
+            }
+            generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                return generatedKeys.getLong("UserId");
+            } else {
+                log.error("Creating user failed, no ID obtained.");
+                return -1l;
+            }
         } catch (SQLException e) {
             log.error("Error Inserting User :" + user);
             throw new RuntimeException("insertUser(): Error inserting user data", e);
         } finally {
-            DbUtils.closeQuietly(conn);
-            DbUtils.closeQuietly(stmt);
+            DbUtils.closeQuietly(conn,stmt,generatedKeys);
+
         }
 
     }

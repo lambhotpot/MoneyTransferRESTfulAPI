@@ -3,30 +3,32 @@ package com.taskforce.moneyapp.objectModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigDecimal;
+
 public class Account {
 
     @JsonIgnore
-    private long accountId ;
+    private long accountId;
 
     @JsonProperty(required = true)
     private String userName;
 
     @JsonProperty(required = true)
-    private Double balance;
+    private BigDecimal balance;
 
     @JsonProperty(required = true)
     private String currencyCode;
 
-    public Account(){
+    public Account() {
     }
 
-    public Account(String userName, Double balance, String currencyCode) {
+    public Account(String userName, BigDecimal balance, String currencyCode) {
         this.userName = userName;
         this.balance = balance;
         this.currencyCode = currencyCode;
     }
 
-    public Account(long accountId,String userName, Double balance, String currencyCode) {
+    public Account(long accountId, String userName, BigDecimal balance, String currencyCode) {
         this.accountId = accountId;
         this.userName = userName;
         this.balance = balance;
@@ -41,7 +43,7 @@ public class Account {
         return userName;
     }
 
-    public Double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 

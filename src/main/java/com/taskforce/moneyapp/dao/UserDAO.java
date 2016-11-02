@@ -9,7 +9,7 @@ public interface UserDAO {
     List<User> getAllUsers();
     User getUserById(long userId);
     User getUserByName(String userName);
-    int insertUser(User user);
+    long insertUser(User user);
     int updateUser(User user);
     int deleteUser(long userId);
 
