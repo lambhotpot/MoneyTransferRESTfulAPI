@@ -12,7 +12,7 @@ public interface AccountDAO {
 
     List<Account> getAllAccounts() throws DAOException;
     Account getAccountById(long accountId) throws DAOException;
-    int createAccount(Account account) throws DAOException;
+    long createAccount(Account account) throws DAOException;
     int deleteAccountById(long accountId) throws DAOException;
 
     /**

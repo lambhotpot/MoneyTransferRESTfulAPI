@@ -25,7 +25,7 @@ public class AccountDAOImpl implements AccountDAO {
     private final static String SQL_CREATE_ACC = "INSERT INTO Account (UserName, Balance, CurrencyCode) VALUES (?, ?, ?)";
     private final static String SQL_UPDATE_ACC_BALANCE = "UPDATE Account SET Balance = ? WHERE AccountId = ? ";
     private final static String SQL_GET_ALL_ACC = "SELECT * FROM Account";
-    private final static String SQL_DELETE_ACC_BY_ID = "DELETE * FROM Account WHERE AccountId = ?";
+    private final static String SQL_DELETE_ACC_BY_ID = "DELETE FROM Account WHERE AccountId = ?";
 
     public List<Account> getAllAccounts() throws DAOException {
         Connection conn = null;
@@ -76,22 +76,33 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
 
-    public int createAccount(Account account) throws DAOException {
+    public long createAccount(Account account) throws DAOException {
         Connection conn = null;
         PreparedStatement stmt = null;
+        ResultSet generatedKeys = null;
         try {
             conn = H2DAOFactory.getConnection();
             stmt = conn.prepareStatement(SQL_CREATE_ACC);
             stmt.setString(1, account.getUserName());
             stmt.setBigDecimal(2, account.getBalance());
             stmt.setString(3, account.getCurrencyCode());
-            return stmt.executeUpdate();
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                log.error("createAccount(): Creating account failed, no rows affected.");
+                throw new DAOException("Account Cannot be created");
+            }
+            generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                return generatedKeys.getLong(1);
+            } else {
+                log.error("Creating account failed, no ID obtained.");
+                throw new DAOException("Account Cannot be created");
+            }
         } catch (SQLException e) {
             log.error("Error Inserting Account  " + account);
             throw new DAOException("createAccount(): Error creating user account " + account, e);
         } finally {
-            DbUtils.closeQuietly(conn);
-            DbUtils.closeQuietly(stmt);
+            DbUtils.closeQuietly(conn,stmt,generatedKeys);
         }
     }
 

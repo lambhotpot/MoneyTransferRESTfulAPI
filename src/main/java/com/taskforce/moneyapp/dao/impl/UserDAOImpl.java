@@ -19,7 +19,7 @@ public class UserDAOImpl implements UserDAO {
     private final static String SQL_GET_USER_BY_NAME = "SELECT * FROM User WHERE UserName = ? ";
     private final static String SQL_INSERT_USER = "INSERT INTO User (UserName, EmailAddress) VALUES (?, ?)";
     private final static String SQL_UPDATE_USER = "UPDATE User SET UserName = ?, EmailAddress = ? WHERE UserId = ? ";
-    private final static String SQL_DELETE_USER_BY_ID = "DELETE * FROM User WHERE  UserId = ?";
+    private final static String SQL_DELETE_USER_BY_ID = "DELETE FROM User WHERE UserId = ? ";
 
     public List<User> getAllUsers() throws DAOException {
         Connection conn = null;
@@ -101,15 +101,15 @@ public class UserDAOImpl implements UserDAO {
             stmt.setString(2, user.getEmailAddress());
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
-                log.error("Creating user failed, no rows affected.");
-                return -1l;
+                log.error("insertUser(): Creating user failed, no rows affected." + user);
+                throw new DAOException("Users Cannot be created");
             }
             generatedKeys = stmt.getGeneratedKeys();
             if (generatedKeys.next()) {
-                return generatedKeys.getLong("UserId");
+                return generatedKeys.getLong(1);
             } else {
-                log.error("Creating user failed, no ID obtained.");
-                return -1l;
+                log.error("insertUser():  Creating user failed, no ID obtained." + user);
+                throw new DAOException("Users Cannot be created");
             }
         } catch (SQLException e) {
             log.error("Error Inserting User :" + user);

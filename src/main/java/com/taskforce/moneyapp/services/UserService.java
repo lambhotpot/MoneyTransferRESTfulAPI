@@ -15,13 +15,14 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class UserService {
     private final DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.H2);
-    static Logger log = Logger.getLogger(UserService.class);
+    private static Logger log = Logger.getLogger(UserService.class);
 
 
     @GET
     @Path("/{userName}")
     public User getUserByName(@PathParam("userName") String userName) throws DAOException {
-        log.debug("Request Received for get User " + userName);
+        if (log.isDebugEnabled())
+            log.debug("Request Received for get User " + userName);
         final User user = daoFactory.getUserDAO().getUserByName(userName);
         if (user == null) {
             throw new WebApplicationException("User Not Found", Response.Status.NOT_FOUND);

@@ -18,7 +18,8 @@ public abstract class DAOFactory {
             case H2:
                 return new H2DAOFactory();
             default:
-                return null;
+                //by default using H2 in memory database
+                return new H2DAOFactory();
         }
     }
 }
