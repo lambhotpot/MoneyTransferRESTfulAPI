@@ -20,8 +20,6 @@ public class UserTransaction {
     private Long toAccountId;
 
 
-    public UserTransaction() {}
-
     public UserTransaction(String currencyCode, BigDecimal amount, Long fromAccountId, Long toAccountId) {
         this.currencyCode = currencyCode;
         this.amount = amount;

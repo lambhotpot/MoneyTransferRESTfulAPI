@@ -51,7 +51,7 @@ public class H2DAOFactory extends DAOFactory {
         Connection conn = null;
         try {
             conn = H2DAOFactory.getConnection();
-            RunScript.execute(conn, new FileReader("src/main/resources/demo.sql"));
+            RunScript.execute(conn, new FileReader("src/test/resources/demo.sql"));
         } catch (SQLException e) {
             log.error("populateTestData(): Error populating user data: ", e);
             throw new RuntimeException(e);

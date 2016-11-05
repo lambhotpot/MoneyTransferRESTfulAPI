@@ -2,6 +2,9 @@ package com.taskforce.moneyapp.application;
 
 
 import com.taskforce.moneyapp.dao.DAOFactory;
+import com.taskforce.moneyapp.services.AccountService;
+import com.taskforce.moneyapp.services.ServiceExceptionMapper;
+import com.taskforce.moneyapp.services.TransactionService;
 import com.taskforce.moneyapp.services.UserService;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Server;
@@ -45,9 +48,10 @@ public class MoneyTransferDemoApp {
         server.setHandler(context);
         ServletHolder servletHolder = context.addServlet(ServletContainer.class, "/*");
         servletHolder.setInitParameter("jersey.config.server.provider.classnames",
-                UserService.class.getCanonicalName());
-        //  AccountService.class.getCanonicalName() + "," +
-        //  TransactionService.class.getCanonicalName());
+                UserService.class.getCanonicalName() + "," +
+                        AccountService.class.getCanonicalName() + "," +
+                        ServiceExceptionMapper.class.getCanonicalName()+ "," +
+                        TransactionService.class.getCanonicalName());
 
         try {
             server.start();
