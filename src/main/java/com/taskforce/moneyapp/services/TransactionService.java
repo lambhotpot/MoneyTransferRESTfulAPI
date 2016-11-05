@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class TransactionService {
     private final DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.H2);
-    static Logger log = Logger.getLogger(TransactionService.class);
+    private static Logger log = Logger.getLogger(TransactionService.class);
 
     @POST
     public void transferFund(UserTransaction transaction) throws DAOException {

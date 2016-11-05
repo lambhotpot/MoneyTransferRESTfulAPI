@@ -18,7 +18,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class AccountService {
     private final DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.H2);
-    static Logger log = Logger.getLogger(AccountService.class);
+    private static Logger log = Logger.getLogger(AccountService.class);
 
 
     @GET

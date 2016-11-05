@@ -38,8 +38,8 @@ public class TestAccountBalance {
 
         final AccountDAO accountDAO = h2DaoFactory.getAccountDAO();
 
-        BigDecimal transferAmount = new BigDecimal(50.01234);
-        transferAmount.setScale(4, RoundingMode.HALF_EVEN);
+        BigDecimal transferAmount = new BigDecimal(50.01234).setScale(4, RoundingMode.HALF_EVEN);
+
 
         UserTransaction transaction = new UserTransaction("EUR", transferAmount, 3L, 4L);
 
