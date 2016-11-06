@@ -51,11 +51,11 @@ public class TestAccountDAO {
     @Test
     public void testCreateAccount() throws DAOException {
         BigDecimal balance = new BigDecimal(10).setScale(4, RoundingMode.HALF_EVEN);
-        Account a = new Account("yangluo", balance, "GBP");
+        Account a = new Account("yangluo", balance, "CNY");
         long aid = h2DaoFactory.getAccountDAO().createAccount(a);
         Account afterCreation = h2DaoFactory.getAccountDAO().getAccountById(aid);
         assertTrue(afterCreation.getUserName().equals("yangluo"));
-        assertTrue(afterCreation.getCurrencyCode().equals("GBP"));
+        assertTrue(afterCreation.getCurrencyCode().equals("CNY"));
         assertTrue(afterCreation.getBalance().equals(balance));
     }
 

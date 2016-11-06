@@ -22,16 +22,20 @@ import static org.junit.Assert.assertTrue;
 /**
  * Integration testing for RestAPI
  * Test data are initialised from src/test/resources/demo.sql
- *
- INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('yangluo',100.0000,'USD'); --ID =1
- INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('qinfran',200.0000,'USD'); --ID =2
- INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('yangluo',500.0000,'EUR'); --ID =3
- INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('qinfran',500.0000,'EUR'); --ID =4
+ * <p>
+ * INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('yangluo',100.0000,'USD'); --ID =1
+ * INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('qinfran',200.0000,'USD'); --ID =2
+ * INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('yangluo',500.0000,'EUR'); --ID =3
+ * INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('qinfran',500.0000,'EUR'); --ID =4
  */
-public class TestTransactionService extends TestService{
+public class TestTransactionService extends TestService {
     //test transaction related operations in the account
 
-
+    /*
+       TC B1 Positive Category = AccountService
+       Scenario: test deposit money to given account number
+                 return 200 OK
+    */
     @Test
     public void testDeposit() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/account/1/deposit/100").build();
@@ -47,6 +51,11 @@ public class TestTransactionService extends TestService{
 
     }
 
+    /*
+      TC B2 Positive Category = AccountService
+      Scenario: test withdraw money from account given account number, account has sufficient fund
+                return 200 OK
+    */
     @Test
     public void testWithDrawSufficientFund() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/account/2/withdraw/100").build();
@@ -62,6 +71,11 @@ public class TestTransactionService extends TestService{
 
     }
 
+    /*
+       TC B3 Negative Category = AccountService
+       Scenario: test withdraw money from account given account number, no sufficient fund in account
+                 return 500 INTERNAL SERVER ERROR
+    */
     @Test
     public void testWithDrawNonSufficientFund() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/account/2/withdraw/1000.23456").build();
@@ -74,12 +88,16 @@ public class TestTransactionService extends TestService{
         assertTrue(responseBody.contains("Not sufficient Fund"));
     }
 
-
+    /*
+       TC B4 Positive Category = AccountService
+       Scenario: test transaction from one account to another with source account has sufficient fund
+                 return 200 OK
+    */
     @Test
     public void testTransactionEnoughFund() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/transaction").build();
         BigDecimal amount = new BigDecimal(10).setScale(4, RoundingMode.HALF_EVEN);
-        UserTransaction transaction = new UserTransaction("EUR",amount,3L,4L);
+        UserTransaction transaction = new UserTransaction("EUR", amount, 3L, 4L);
 
         String jsonInString = mapper.writeValueAsString(transaction);
         StringEntity entity = new StringEntity(jsonInString);
@@ -91,12 +109,16 @@ public class TestTransactionService extends TestService{
         assertTrue(statusCode == 200);
     }
 
-
+    /*
+        TC B5 Negative Category = AccountService
+        Scenario: test transaction from one account to another with source account has no sufficient fund
+                  return 500 INTERNAL SERVER ERROR
+     */
     @Test
     public void testTransactionNotEnoughFund() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/transaction").build();
         BigDecimal amount = new BigDecimal(100000).setScale(4, RoundingMode.HALF_EVEN);
-        UserTransaction transaction = new UserTransaction("EUR",amount,3L,4L);
+        UserTransaction transaction = new UserTransaction("EUR", amount, 3L, 4L);
 
         String jsonInString = mapper.writeValueAsString(transaction);
         StringEntity entity = new StringEntity(jsonInString);
@@ -108,11 +130,16 @@ public class TestTransactionService extends TestService{
         assertTrue(statusCode == 500);
     }
 
+    /*
+       TC C1 Negative Category = TransactionService
+       Scenario: test transaction from one account to another with source/destination account with different currency code
+                 return 500 INTERNAL SERVER ERROR
+    */
     @Test
     public void testTransactionDifferentCcy() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/transaction").build();
         BigDecimal amount = new BigDecimal(100).setScale(4, RoundingMode.HALF_EVEN);
-        UserTransaction transaction = new UserTransaction("USD",amount,3L,4L);
+        UserTransaction transaction = new UserTransaction("USD", amount, 3L, 4L);
 
         String jsonInString = mapper.writeValueAsString(transaction);
         StringEntity entity = new StringEntity(jsonInString);
