@@ -20,15 +20,21 @@ import static org.junit.Assert.assertTrue;
 /**
  * Integration testing for RestAPI
  * Test data are initialised from src/test/resources/demo.sql
- *
- INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('yangluo',100.0000,'USD'); --ID =1
- INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('qinfran',200.0000,'USD'); --ID =2
- INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('yangluo',500.0000,'EUR'); --ID =3
- INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('qinfran',500.0000,'EUR'); --ID =4
+ * <p>
+ * INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('yangluo',100.0000,'USD'); --ID =1
+ * INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('qinfran',200.0000,'USD'); --ID =2
+ * INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('yangluo',500.0000,'EUR'); --ID =3
+ * INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('qinfran',500.0000,'EUR'); --ID =4
  */
 
-public class TestAccountService extends TestService{
+public class TestAccountService extends TestService {
 
+
+    /*
+    TC A1 Positive Category = AccountService
+    Scenario: test get user account by user name
+              return 200 OK
+     */
     @Test
     public void testGetAccountByUserName() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/account/1").build();
@@ -43,7 +49,11 @@ public class TestAccountService extends TestService{
         assertTrue(account.getUserName().equals("yangluo"));
     }
 
-
+    /*
+    TC A2 Positive Category = AccountService
+    Scenario: test get all user accounts
+              return 200 OK
+    */
     @Test
     public void testGetAllAccounts() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/account/all").build();
@@ -57,6 +67,11 @@ public class TestAccountService extends TestService{
         assertTrue(accounts.length > 0);
     }
 
+    /*
+    TC A3 Positive Category = AccountService
+    Scenario: test get account balance given account ID
+              return 200 OK
+    */
     @Test
     public void testGetAccountBalance() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/account/1/balance").build();
@@ -71,11 +86,16 @@ public class TestAccountService extends TestService{
         assertTrue(res.equals(db));
     }
 
+    /*
+    TC A4 Positive Category = AccountService
+    Scenario: test create new user account
+              return 200 OK
+    */
     @Test
     public void testCreateAccount() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/account/create").build();
         BigDecimal balance = new BigDecimal(10).setScale(4, RoundingMode.HALF_EVEN);
-        Account acc = new Account("yangluo", balance, "GBP");
+        Account acc = new Account("yangluo", balance, "CNY");
         String jsonInString = mapper.writeValueAsString(acc);
         StringEntity entity = new StringEntity(jsonInString);
         HttpPut request = new HttpPut(uri);
@@ -87,12 +107,16 @@ public class TestAccountService extends TestService{
         String jsonString = EntityUtils.toString(response.getEntity());
         Account aAfterCreation = mapper.readValue(jsonString, Account.class);
         assertTrue(aAfterCreation.getUserName().equals("yangluo"));
-        assertTrue(aAfterCreation.getCurrencyCode().equals("GBP"));
+        assertTrue(aAfterCreation.getCurrencyCode().equals("CNY"));
     }
 
-
+    /*
+    TC A5 Negative Category = AccountService
+    Scenario: test create user account already existed.
+              return 500 INTERNAL SERVER ERROR
+    */
     @Test
-    public void testCreateExistingUser() throws IOException, URISyntaxException {
+    public void testCreateExistingAccount() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/account/create").build();
         Account acc = new Account("qinfran", new BigDecimal(0), "USD");
         String jsonInString = mapper.writeValueAsString(acc);
@@ -106,7 +130,11 @@ public class TestAccountService extends TestService{
 
     }
 
-
+    /*
+    TC A6 Positive Category = AccountService
+    Scenario: delete valid user account
+              return 200 OK
+    */
     @Test
     public void testDeleteAccount() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/account/3").build();
@@ -117,6 +145,12 @@ public class TestAccountService extends TestService{
         assertTrue(statusCode == 200);
     }
 
+
+    /*
+    TC A7 Negative Category = AccountService
+    Scenario: test delete non-existent account. return 404 NOT FOUND
+              return 200 OK
+    */
     @Test
     public void testDeleteNonExistingAccount() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/account/300").build();

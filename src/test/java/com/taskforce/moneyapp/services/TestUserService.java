@@ -8,7 +8,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -27,13 +26,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class TestUserService extends TestService {
 
-    @BeforeClass
-    public static void setup() throws Exception {
-        TestService.setup();
-    }
-
-
-
+    /*
+       TC D1 Positive Category = UserService
+       Scenario: test get user by given user name
+                 return 200 OK
+    */
     @Test
     public void testGetUser() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/user/yangluo").build();
@@ -50,7 +47,11 @@ public class TestUserService extends TestService {
 
     }
 
-
+     /*
+     TC D2 Positive Category = UserService
+     Scenario: test get all users
+               return 200 OK
+      */
     @Test
     public void testGetAllUsers() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/user/all").build();
@@ -64,11 +65,15 @@ public class TestUserService extends TestService {
         assertTrue(users.length > 0);
     }
 
-
+    /*
+        TC D3 Positive Category = UserService
+        Scenario: Create user using JSON
+                  return 200 OK
+     */
     @Test
     public void testCreateUser() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/user/create").build();
-        User user = new User("liandrea", "liandra@gmail.com");
+        User user = new User("liandre", "liandre@gmail.com");
         String jsonInString = mapper.writeValueAsString(user);
         StringEntity entity = new StringEntity(jsonInString);
         HttpPost request = new HttpPost(uri);
@@ -79,11 +84,15 @@ public class TestUserService extends TestService {
         assertTrue(statusCode == 200);
         String jsonString = EntityUtils.toString(response.getEntity());
         User uAfterCreation = mapper.readValue(jsonString, User.class);
-        assertTrue(uAfterCreation.getUserName().equals("liandrea"));
-        assertTrue(uAfterCreation.getEmailAddress().equals("liandra@gmail.com"));
+        assertTrue(uAfterCreation.getUserName().equals("liandre"));
+        assertTrue(uAfterCreation.getEmailAddress().equals("liandre@gmail.com"));
     }
 
-
+    /*
+        TC D4 Negative Category = UserService
+        Scenario: Create user already existed using JSON
+                  return 400 BAD REQUEST
+    */
     @Test
     public void testCreateExistingUser() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/user/create").build();
@@ -99,7 +108,11 @@ public class TestUserService extends TestService {
 
     }
 
-
+    /*
+     TC D5 Positive Category = UserService
+     Scenario: Update Existing User using JSON provided from client
+               return 200 OK
+     */
     @Test
     public void testUpdateUser() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/user/2").build();
@@ -114,6 +127,12 @@ public class TestUserService extends TestService {
         assertTrue(statusCode == 200);
     }
 
+
+    /*
+    TC D6 Negative Category = UserService
+    Scenario: Update non existed User using JSON provided from client
+              return 404 NOT FOUND
+    */
     @Test
     public void testUpdateNonExistingUser() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/user/100").build();
@@ -128,7 +147,11 @@ public class TestUserService extends TestService {
         assertTrue(statusCode == 404);
     }
 
-
+    /*
+     TC D7 Positive Category = UserService
+     Scenario: test delete user
+                return 200 OK
+    */
     @Test
     public void testDeleteUser() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/user/3").build();
@@ -139,6 +162,12 @@ public class TestUserService extends TestService {
         assertTrue(statusCode == 200);
     }
 
+
+    /*
+    TC D8 Negative Category = UserService
+    Scenario: test delete non-existed user
+              return 404 NOT FOUND
+   */
     @Test
     public void testDeleteNonExistingUser() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/user/300").build();

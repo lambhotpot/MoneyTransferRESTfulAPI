@@ -1,3 +1,5 @@
+--This script is used for unit test cases, DO NOT CHANGE!
+
 DROP TABLE IF EXISTS User;
 
 CREATE TABLE User (UserId LONG PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -24,3 +26,5 @@ INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('yangluo',100.0000,'
 INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('qinfran',200.0000,'USD');
 INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('yangluo',500.0000,'EUR');
 INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('qinfran',500.0000,'EUR');
+INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('yangluo',500.0000,'GBP');
+INSERT INTO Account (UserName,Balance,CurrencyCode) VALUES ('qinfran',500.0000,'GBP');
