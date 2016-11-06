@@ -149,7 +149,7 @@ public class TestAccountService extends TestService {
     /*
     TC A7 Negative Category = AccountService
     Scenario: test delete non-existent account. return 404 NOT FOUND
-              return 200 OK
+              return 404 NOT FOUND
     */
     @Test
     public void testDeleteNonExistingAccount() throws IOException, URISyntaxException {
