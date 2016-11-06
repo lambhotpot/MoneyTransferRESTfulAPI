@@ -26,19 +26,19 @@ http://localhost:8083/money-app
 
 | HTTP METHOD        | PATH           |  USAGE |
 | ------------- |:-------------|:-----|
-| GET     | /money-app/user/{userName} | get user by user name |
-| GET     | /money-app/user/all  |   get all users |
-| PUT     | /money-app/user/create     |  create a new user |
-| POST      | /money-app/user/{userId} | update user |
-| DELETE      | /money-app/user/{userId}     | remove user |
-| GET     | /money-app/account/{accountId} | get account by accountId |
-| GET     | /money-app/account/all  |   get all accounts |
-| GET     | /money-app/account/{accountId}/balance  |   get account balance by accountId |
-| PUT     | /money-app/account/create     |  create a new account |
-| DELETE      | /money-app/account/{accountId}     | remove account by accountId |
-| PUT     | /money-app/account/{accountId}/withdraw/{amount}    |  withdraw money from account |
-| PUT     | /money-app/account/{accountId}/deposit/{amount}     |  deposit money to account |
-| POST     | /money-app//money-app/transaction    |  perform transaction between 2 user accounts |
+| GET     | /user/{userName} | get user by user name |
+| GET     | /user/all  |   get all users |
+| PUT     | /user/create     |  create a new user |
+| POST      | /user/{userId} | update user |
+| DELETE      | /user/{userId}     | remove user |
+| GET     | /account/{accountId} | get account by accountId |
+| GET     | /account/all  |   get all accounts |
+| GET     | /account/{accountId}/balance  |   get account balance by accountId |
+| PUT     | /account/create     |  create a new account |
+| DELETE   |/account/{accountId}     | remove account by accountId |
+| PUT     | /account/{accountId}/withdraw/{amount}    |  withdraw money from account |
+| PUT     | /account/{accountId}/deposit/{amount}     |  deposit money to account |
+| POST     | /money-app/transaction    |  perform transaction between 2 user accounts |
 
 ## Http Status 
 
