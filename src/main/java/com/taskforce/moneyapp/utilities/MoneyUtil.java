@@ -22,15 +22,17 @@ public enum MoneyUtil {
      * @param inputCcyCode String Currency code to be validated
      * @return true if currency code is valid ISO code, false otherwise
      */
-    public static boolean validateCcyCode(String inputCcyCode) {
-        boolean result = false;
+    public boolean validateCcyCode(String inputCcyCode) {
         try {
             Currency instance = Currency.getInstance(inputCcyCode);
-            return instance.getSymbol().equals(inputCcyCode);
+            if(log.isDebugEnabled()){
+                log.debug("Validate Currency Code: " + instance.getSymbol());
+            }
+            return instance.getCurrencyCode().equals(inputCcyCode);
         } catch (Exception e) {
             log.warn("Cannot parse the input Currency Code, Validation Failed: ", e);
         }
-        return result;
+        return false;
     }
 
 }

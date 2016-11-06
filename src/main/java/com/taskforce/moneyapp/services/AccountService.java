@@ -22,6 +22,7 @@ public class AccountService {
 
 
     @GET
+    @Path("/all")
     public List<Account> getAllAccounts() throws DAOException {
         return daoFactory.getAccountDAO().getAllAccounts();
     }
@@ -45,6 +46,7 @@ public class AccountService {
 
 
     @POST
+    @Path("/create")
     public Account createAccount(Account account) throws DAOException {
         final long accountId = daoFactory.getAccountDAO().createAccount(account);
         return daoFactory.getAccountDAO().getAccountById(accountId);

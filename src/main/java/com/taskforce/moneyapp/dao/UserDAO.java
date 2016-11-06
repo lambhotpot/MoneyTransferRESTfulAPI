@@ -16,7 +16,7 @@ public interface UserDAO {
      * @return userId generated from insertion. return -1 on error
      */
     long insertUser(User user) throws DAOException;
-    int updateUser(User user) throws DAOException;
+    int updateUser(Long userId, User user) throws DAOException;
     int deleteUser(long userId) throws DAOException;
 
 }

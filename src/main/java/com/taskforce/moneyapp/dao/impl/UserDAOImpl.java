@@ -120,7 +120,7 @@ public class UserDAOImpl implements UserDAO {
 
     }
 
-    public int updateUser(User user) throws DAOException {
+    public int updateUser(Long userId,User user) throws DAOException {
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -129,7 +129,7 @@ public class UserDAOImpl implements UserDAO {
             stmt = conn.prepareStatement(SQL_UPDATE_USER);
             stmt.setString(1, user.getUserName());
             stmt.setString(2, user.getEmailAddress());
-            stmt.setLong(3, user.getUserId());
+            stmt.setLong(3, userId);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             log.error("Error Updating User :" + user);

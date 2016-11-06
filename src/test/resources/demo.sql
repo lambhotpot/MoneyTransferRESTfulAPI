@@ -8,6 +8,7 @@ CREATE UNIQUE INDEX idx_ue on User(UserName,EmailAddress);
 
 INSERT INTO User (UserName, EmailAddress) VALUES ('yangluo','yangluo@gmail.com');
 INSERT INTO User (UserName, EmailAddress) VALUES ('qinfran','qinfran@gmail.com');
+INSERT INTO User (UserName, EmailAddress) VALUES ('liusisi','liusisi@gmail.com');
 
 DROP TABLE IF EXISTS Account;
 

@@ -21,7 +21,7 @@ public class TestAccountDAO {
 
     @BeforeClass
     public static void setup() {
-        //prepare test database and test data
+        //prepare test database and test data. Test data are initialised from src/test/resources/demo.sql
         h2DaoFactory.populateTestData();
     }
 

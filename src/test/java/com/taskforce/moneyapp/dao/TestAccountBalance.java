@@ -15,6 +15,7 @@ import java.util.concurrent.CountDownLatch;
 import static junit.framework.TestCase.assertTrue;
 
 
+
 public class TestAccountBalance {
 
     private static Logger log = Logger.getLogger(TestAccountDAO.class);
@@ -24,7 +25,7 @@ public class TestAccountBalance {
 
     @BeforeClass
     public static void setup() {
-        //prepare test database and test data
+        //prepare test database and test data, Test data are initialised from src/test/resources/demo.sql
         h2DaoFactory.populateTestData();
     }
 

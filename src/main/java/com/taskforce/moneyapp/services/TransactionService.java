@@ -21,19 +21,24 @@ public class TransactionService {
     private static Logger log = Logger.getLogger(TransactionService.class);
 
     @POST
-    public void transferFund(UserTransaction transaction) throws DAOException {
+    public Response transferFund(UserTransaction transaction) throws DAOException {
 
         if(log.isDebugEnabled())
             log.debug("TransferFund invoked with parameter : " + transaction);
 
         String currency = transaction.getCurrencyCode();
-        if (MoneyUtil.validateCcyCode(currency)) {
-            daoFactory.getAccountDAO().transferAccountBalance(transaction);
+        if (MoneyUtil.INSTANCE.validateCcyCode(currency)) {
+            int updateCount = daoFactory.getAccountDAO().transferAccountBalance(transaction);
+            if (updateCount == 2) {
+                return Response.status(Response.Status.OK).build();
+            } else {
+                //transaction failed
+                throw new WebApplicationException("Transaction failed", Response.Status.BAD_REQUEST);
+            }
 
         } else {
             throw new WebApplicationException("Currency Code Invalid ", Response.Status.BAD_REQUEST);
         }
-
 
     }
 

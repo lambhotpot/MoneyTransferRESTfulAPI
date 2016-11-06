@@ -148,7 +148,7 @@ public class AccountDAOImpl implements AccountDAO {
             //update account upon success locking
             BigDecimal balance = targetAccount.getBalance().add(deltaAmount);
             if(balance.compareTo(MoneyUtil.zeroAmount) < 0){
-                throw new DAOException("updateAccountBalance(): Not sufficient Fund for account: " + accountId);
+                throw new DAOException("Not sufficient Fund for account: " + accountId);
             }
 
             updateStmt = conn.prepareStatement(SQL_UPDATE_ACC_BALANCE);
@@ -166,7 +166,7 @@ public class AccountDAOImpl implements AccountDAO {
                 if (conn != null)
                     conn.rollback();
             } catch (SQLException re) {
-                throw new DAOException("updateAccountBalance(): Fail to rollback transaction", re);
+                throw new DAOException("Fail to rollback transaction", re);
             }
         } finally {
             DbUtils.closeQuietly(conn);

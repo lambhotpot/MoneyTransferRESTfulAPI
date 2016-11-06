@@ -22,7 +22,7 @@ public class UserService {
     @Path("/{userName}")
     public User getUserByName(@PathParam("userName") String userName) throws DAOException {
         if (log.isDebugEnabled())
-            log.debug("Request Received for get User " + userName);
+            log.debug("Request Received for get User by Name " + userName);
         final User user = daoFactory.getUserDAO().getUserByName(userName);
         if (user == null) {
             throw new WebApplicationException("User Not Found", Response.Status.NOT_FOUND);
@@ -31,14 +31,16 @@ public class UserService {
     }
 
     @GET
+    @Path("/all")
     public List<User> getAllUsers() throws DAOException {
         return daoFactory.getUserDAO().getAllUsers();
     }
 
     @POST
+    @Path("/create")
     public User createUser(User user) throws DAOException {
         if (daoFactory.getUserDAO().getUserByName(user.getUserName()) != null) {
-            throw new WebApplicationException("User name already exist", Response.Status.NOT_ACCEPTABLE);
+            throw new WebApplicationException("User name already exist", Response.Status.BAD_REQUEST);
         }
         final long uId = daoFactory.getUserDAO().insertUser(user);
         return daoFactory.getUserDAO().getUserById(uId);
@@ -47,7 +49,7 @@ public class UserService {
     @PUT
     @Path("/{userId}")
     public Response updateUser(@PathParam("userId") long userId, User user) throws DAOException {
-        final int updateCount = daoFactory.getUserDAO().updateUser(user);
+        final int updateCount = daoFactory.getUserDAO().updateUser(userId, user);
         if (updateCount == 1) {
             return Response.status(Response.Status.OK).build();
         } else {
