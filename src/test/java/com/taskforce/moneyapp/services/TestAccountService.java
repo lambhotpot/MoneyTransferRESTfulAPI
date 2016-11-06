@@ -4,7 +4,7 @@ import com.taskforce.moneyapp.objectModel.Account;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
@@ -78,7 +78,7 @@ public class TestAccountService extends TestService{
         Account acc = new Account("yangluo", balance, "GBP");
         String jsonInString = mapper.writeValueAsString(acc);
         StringEntity entity = new StringEntity(jsonInString);
-        HttpPost request = new HttpPost(uri);
+        HttpPut request = new HttpPut(uri);
         request.setHeader("Content-type", "application/json");
         request.setEntity(entity);
         HttpResponse response = client.execute(request);
@@ -97,7 +97,7 @@ public class TestAccountService extends TestService{
         Account acc = new Account("qinfran", new BigDecimal(0), "USD");
         String jsonInString = mapper.writeValueAsString(acc);
         StringEntity entity = new StringEntity(jsonInString);
-        HttpPost request = new HttpPost(uri);
+        HttpPut request = new HttpPut(uri);
         request.setHeader("Content-type", "application/json");
         request.setEntity(entity);
         HttpResponse response = client.execute(request);

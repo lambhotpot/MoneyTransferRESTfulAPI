@@ -45,7 +45,7 @@ public class AccountService {
     }
 
 
-    @POST
+    @PUT
     @Path("/create")
     public Account createAccount(Account account) throws DAOException {
         final long accountId = daoFactory.getAccountDAO().createAccount(account);
@@ -73,10 +73,13 @@ public class AccountService {
     @Path("/{accountId}/withdraw/{amount}")
     public Account withdraw(@PathParam("accountId") long accountId,@PathParam("amount") BigDecimal amount) throws DAOException {
 
+
         if (amount.compareTo(MoneyUtil.zeroAmount) <=0){
             throw new WebApplicationException("Invalid Deposit amount", Response.Status.BAD_REQUEST);
         }
         BigDecimal delta = amount.negate();
+        if (log.isDebugEnabled())
+            log.debug("Withdraw service: delta change to account  " + delta + " Account ID = " +accountId);
         daoFactory.getAccountDAO().updateAccountBalance(accountId,delta.setScale(4, RoundingMode.HALF_EVEN));
         return daoFactory.getAccountDAO().getAccountById(accountId);
     }

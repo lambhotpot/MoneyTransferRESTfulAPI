@@ -64,7 +64,7 @@ public class TestTransactionService extends TestService{
 
     @Test
     public void testWithDrawNonSufficientFund() throws IOException, URISyntaxException {
-        URI uri = builder.setPath("/money-app/account/2/withdraw/1000").build();
+        URI uri = builder.setPath("/money-app/account/2/withdraw/1000.23456").build();
         HttpPut request = new HttpPut(uri);
         request.setHeader("Content-type", "application/json");
         HttpResponse response = client.execute(request);
@@ -74,7 +74,7 @@ public class TestTransactionService extends TestService{
         assertTrue(responseBody.contains("Not sufficient Fund"));
     }
 
-    //
+
     @Test
     public void testTransactionEnoughFund() throws IOException, URISyntaxException {
         URI uri = builder.setPath("/money-app/transaction").build();
